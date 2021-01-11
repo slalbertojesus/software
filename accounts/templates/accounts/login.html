@@ -7,48 +7,51 @@
                 <script src = "https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity = "sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin = "anonymous" > </script >
                 <script src = "https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity = "sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin = "anonymous" > </script >
                 <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity = "sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin = "anonymous" > </script >
+                <script
+                        src="https://code.jquery.com/jquery-3.5.1.js"
+                        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+                        crossorigin="anonymous"></script>
+                {% block scripts %}
+                {% endblock %} 
         </head >
         <div class="container">
                 <h4 class="pb-2 pt-3">UMLCool</h4>
                 <div class="row" id="parent">
                         <div class="col-md-6 col-12 card d-block border-0 py-2">
-                                <a href="" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#cardLogin" data-parent="#parent">Login</a>
-                                <a href="" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#cardRegister" data-parent="#parent">Register</a>
+                                <a href="" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#cardLogin" data-parent="#parent">Entrar!</a>
+                                <a href="{% url 'accounts:register' %}" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#cardRegister" data-parent="#parent">Crear cuenta</a>
                                 <div class="collapse show py-2" id="cardLogin">
                                         <div class="card">
                                                 <div class="card-block">
-                                                        <h2 class="text-xs-center">Login</h2>
+                                                        <h2 class="text-center">Iniciar sesión</h2>
                                                         <ul class="list-inline text-center">
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title="Twitter"><i class="fa fa-2x fa-twitter"></i></a>&nbsp; </li>
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title=""><i class="fa fa-2x fa-google-plus"></i></a>&nbsp; </li>
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title="Facebook"><i class="fa fa-2x fa-facebook"></i></a></li>
                                                         </ul>
-                                                        <form role="form">
+                                                        <form action="/login" method="post">
+                                                                {% csrf_token %}
                                                                 <div class="form-group row">
-                                                                        <label for="inputEmailForm" class="sr-only control-label">Email</label>
+                                                                        <label for="inputEmailForm" class="sr-only control-label">Correo</label>
                                                                         <div class="offset-sm-2 col-sm-8">
-                                                                                <input type="text" class="form-control" id="inputEmailForm" placeholder="email" required="">
+                                                                                <input name="username" type="text" class="form-control" id="inputEmailForm" placeholder="Usuario" required="">
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group row">
-                                                                        <label for="inputPasswordForm" class="sr-only control-label">Password</label>
+                                                                        <label for="inputPasswordForm" class="sr-only control-label">Contraseña</label>
                                                                         <div class="offset-sm-2 col-sm-8">
-                                                                                <input type="text" class="form-control" id="inputPasswordForm" placeholder="password" required="">
-                                                                        </div>
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                        <div class="offset-sm-2 col-sm-8">
-                                                                                <div class="checkbox small">
-                                                                                        <label>
-                                                                                                <input type="checkbox"> Remember me
-                                                                                        </label>
-                                                                                </div>
+                                                                                <input name="password" type="password" class="form-control" id="inputPasswordForm" placeholder="Contraseña" required="">
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group row">
                                                                         <div class="offset-sm-2 col-sm-8 pb-3 pt-2">
-                                                                                <button type="submit" class="btn btn-secondary-outline btn-lg btn-block">Sign-in</button>
+                                                                                <button type="submit" class="btn btn-secondary-outline btn-lg btn-block">Iniciar sesión</button>
                                                                         </div>
+                                                                </div>
+                                                                <div id=messages" class="d-flex justify-content-center text-danger">
+                                                                        {% for message in messages %}
+                                                                                <p id="messages">{{message}}</p>
+                                                                        {% endfor %}    
                                                                 </div>
                                                         </form>
                                                 </div>
@@ -57,16 +60,45 @@
                                 <div class="collapse py-2" id="cardRegister">
                                         <div class="card">
                                                 <div class="card-block">
-                                                        <h2 class="text-center">Register</h2>
+                                                        <h2 class="text-center">Registrarse</h2>
                                                         <ul class="list-inline text-center">
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title="Twitter"><i class="fa fa-2x fa-twitter"></i></a>&nbsp; </li>
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title=""><i class="fa fa-2x fa-google-plus"></i></a>&nbsp; </li>
                                                                 <li class="list-inline-item"><a class="btn btn-lg" href="" title="Facebook"><i class="fa fa-2x fa-facebook"></i></a></li>
                                                         </ul>
-                                                        <form role="form">
+                                                        <form action="/register" method="post">
+                                                                {% csrf_token %}
+                                                                <div class="username-container">
+                                                                        <div class="username-container">
+                                                                                {{form.username}}
+                                                                        </div>
+                                                                        <div class="email-container">
+                                                                                {{form.email}}
+                                                                        </div>
+                                                                        <div class="password1-container">
+                                                                                {{form.password1}}
+                                                                        </div>
+                                                                        <div class="password2-container">
+                                                                                {{form.password2}}
+                                                                        </div>
+                                                                </div>
                                                                 <div class="form-group row">
-                                                                        <label for="input2EmailForm" class="sr-only control-label">email</label>
-                                                                        <div class="offset-sm-2 col-sm-8">
-                                                                                <input type="text" class="form-control" id="input2EmailForm" placeholder="email" required="">
+                                                                        <div class="offset-sm-2 col-sm-8 pb-3 pt-2">
+                                                                                <button type="submit" class="btn btn-secondary-outline btn-lg btn-block">Registrar usuario</button>
+                                                                        </div>
+                                                                </div>
+                                                                <div id=messages" class="d-flex justify-content-center text-danger">
+                                                                        {% for field in form %}
+                                                                                <p id="errors">{{field.errors}}</p>
+                                                                        {% endfor %}
+                                                                </div>
+                                                        </form>
+                                                        <script>
+                                                                var message_ele = document.getElementById("messages");
+                                                                setTimeout(function(){ 
+                                                                        message_ele.style.display = "none"; 
+                                                                }, 2000);
+                                                        </script>
+
 
 </html> 
